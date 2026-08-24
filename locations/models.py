@@ -1,3 +1,7 @@
+from ipaddress import ip_address
+from tkinter.constants import CASCADE
+
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.conf import settings
 from django.db.models import UniqueConstraint
@@ -77,8 +81,28 @@ class NetworkInterface(models.Model):
     network_interface_type=models.CharField(max_length=10,choices=NetworkInterfaceType.choices)
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
 
-
     class Meta:
         constraints=[
             UniqueConstraint(fields=["device","name"],name="unique_device_name")
             ]
+
+class IPAddress(models.Model):
+    class AssignmentMethod(models.TextChoices):
+        Static="ST", ("Static"),
+        DHCP="DHCP", ("Dynamic Host Configuration Protocol"),
+
+    ip_address=models.GenericIPAddressField()
+    prefix=models.PositiveSmallIntegerField()
+    assignment_method=models.CharField(max_length=4,choices=AssignmentMethod.choices)
+    network_interface=models.ForeignKey(NetworkInterface,on_delete=models.CASCADE)
+    def clean(self):
+        super().clean()
+        version_checker= ip_address(self.ip_address).version
+        if version_checker == 4:
+            if self.prefix>32:
+                raise ValidationError("Your IP prefix is out of range of for IPv4")
+        elif version_checker == 6:
+            if self.prefix > 128:
+                raise ValidationError("Your IP prefix is out of range for IPv6")
+
+

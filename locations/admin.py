@@ -1,10 +1,11 @@
 from django.contrib import admin
-from .models import Department, Location, DeviceType, Manufacturer,Device
+from .models import Department, Location, DeviceType, Manufacturer, Device, NetworkInterface
 
 admin.site.register(Department)
 admin.site.register(Location)
 admin.site.register(Manufacturer)
 admin.site.register(DeviceType)
+admin.site.register(NetworkInterface)
 
 @admin.register(Device)
 class DeviceAdmin(admin.ModelAdmin):
