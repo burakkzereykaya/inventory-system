@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.db.models import UniqueConstraint
+from django.utils.translation import gettext_lazy as _
 
 
 class Department(models.Model):
@@ -58,6 +59,26 @@ class Device(models.Model):
 
     class Meta:
         constraints=[
-            UniqueConstraint(fields=["manufacturer", "serial_number"],name="unique_manufacturer_serial")
+            UniqueConstraint(fields=["manufacturer", "serial_number"],name="unique_manufacturer_serial"),
 
         ]
+
+
+
+
+class NetworkInterface(models.Model):
+    class NetworkInterfaceType(models.TextChoices):
+        Ethernet = "ET", _("Ethernet")
+        WiFi = "WF", _("Wi-Fi")
+        Fiber = "FB", _("Fiber")
+        Virtual = "VT", _("Virtual")
+    name=models.CharField(max_length=50)
+    mac_address=models.CharField(max_length=20)
+    network_interface_type=models.CharField(max_length=10,choices=NetworkInterfaceType.choices)
+    device = models.ForeignKey(Device, on_delete=models.CASCADE)
+
+
+    class Meta:
+        constraints=[
+            UniqueConstraint(fields=["device","name"],name="unique_device_name")
+            ]
