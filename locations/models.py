@@ -40,19 +40,19 @@ class Manufacturer(models.Model):
         return self.name
 
 class Device(models.Model):
-    statuses ={
-        "AC":"Active",
-        "IN":"In Storage",
-        "UR":"Under Repair",
-        "RE":"Retired",
-        "DI":"Disposed",
-    }
+    class Statuses(models.TextChoices):
+     Active="AC","Active",
+     In_storage ="IN","In Storage",
+     Under_Repair ="UR","Under Repair",
+     Retired = "RE","Retired",
+     Disposed = "DI","Disposed",
+
     asset_id=models.CharField(max_length=40,unique=True)
     serial_number=models.CharField(max_length=40)
     device_type=models.ForeignKey(DeviceType,on_delete=models.PROTECT)
     manufacturer=models.ForeignKey(Manufacturer,on_delete=models.PROTECT)
     location=models.ForeignKey(Location,on_delete=models.PROTECT)
-    status=models.CharField(choices=statuses,max_length=5)
+    status=models.CharField(choices=Statuses.choices,max_length=5)
     status_note=models.CharField(max_length=100,blank=True)
     general_note=models.TextField(max_length=300,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -106,3 +106,10 @@ class IPAddress(models.Model):
                 raise ValidationError("Your IP prefix is out of range for IPv6")
 
 
+class DeviceStatusHistory(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.PROTECT,related_name="status_history")
+    previous_status=models.CharField(choices=Device.Statuses.choices,max_length=4)
+    new_status=models.CharField(choices=Device.Statuses.choices,max_length=4)
+    status_note=models.CharField(max_length=100,blank=True)
+    changed_at=models.DateTimeField(auto_now_add=True)
+    changed_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT)
