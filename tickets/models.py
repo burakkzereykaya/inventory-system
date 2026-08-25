@@ -1,8 +1,15 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from locations.models import Location, Device
 from django.conf import settings
 
 class Ticket(models.Model):
+    def clean(self):
+        super().clean()
+        if self.status == Ticket.Ticket_Statuses.In_Progress and self.assigned_to is None:
+            raise ValidationError("Tickets which status are IN PROGRESS must assigned to a personnel")
+
+
     class Priorities(models.TextChoices):
         low ="LOW","Low",
         medium ="MED","Medium",
@@ -21,7 +28,7 @@ class Ticket(models.Model):
     affected_location=models.ForeignKey(Location,blank=True,on_delete=models.PROTECT,related_name="ticket_location",null=True)
     reported_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="reported_tickets")
     recorded_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="recorded_tickets")
-    assigned_to=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="assigned_tickets",null=True)
+    assigned_to=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="assigned_tickets",null=True,blank=True)
     priority=models.CharField(choices=Priorities.choices,max_length=4)
     status=models.CharField(choices=Ticket_Statuses.choices,max_length=6)
     created_at=models.DateTimeField(auto_now_add=True)
