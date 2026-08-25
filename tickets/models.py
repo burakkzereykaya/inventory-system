@@ -1,0 +1,29 @@
+from django.db import models
+from locations.models import Location, Device
+from django.conf import settings
+
+class Ticket(models.Model):
+    class Priorities(models.TextChoices):
+        low ="LOW","Low",
+        medium ="MED","Medium",
+        high ="HIGH","High",
+        critical ="CRT","Critical",
+    class Ticket_Statuses(models.TextChoices):
+        Queued="QUEUE","Queued",
+        In_Progress="PROG","In Progress",
+        Waiting="WAIT","Waiting",
+        Deferred="DEFER","Deferred"
+        Resolved="SOLVED","Resolved",
+
+    title=models.CharField(max_length=30)
+    description=models.TextField(max_length=150)
+    affected_devices=models.ManyToManyField(Device,blank=True,related_name="tickets")
+    affected_location=models.ForeignKey(Location,blank=True,on_delete=models.PROTECT,related_name="ticket_location",null=True)
+    reported_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="reported_tickets")
+    recorded_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="recorded_tickets")
+    assigned_to=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="assigned_tickets",null=True)
+    priority=models.CharField(choices=Priorities.choices,max_length=4)
+    status=models.CharField(choices=Ticket_Statuses.choices,max_length=6)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    resolved_at=models.DateTimeField(null=True,blank=True)
