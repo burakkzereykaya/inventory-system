@@ -25,6 +25,7 @@ class Ticket(models.Model):
         Deferred="DEFER","Deferred"
         Resolved="SOLVED","Resolved",
 
+
     title=models.CharField(max_length=30)
     description=models.TextField(max_length=150)
     affected_devices=models.ManyToManyField(Device,blank=True,related_name="tickets")
@@ -37,3 +38,11 @@ class Ticket(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     resolved_at=models.DateTimeField(null=True,blank=True)
+
+class TicketAssignmentHistory(models.Model):
+        ticket =models.ForeignKey(Ticket,on_delete=models.PROTECT,related_name="ticket_assignment_history")
+        previous_assignee=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="user_was_assignee",blank=True,null=True)
+        new_assignee=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="user_assigned",blank=True,null=True)
+        changed_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="history_changes")
+        changed_at=models.DateTimeField(auto_now_add=True)
+        note=models.CharField(max_length=80,blank=True)
