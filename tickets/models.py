@@ -8,7 +8,10 @@ class Ticket(models.Model):
         super().clean()
         if self.status == Ticket.TicketStatuses.In_Progress and self.assigned_to is None:
             raise ValidationError("Tickets which status are IN PROGRESS must assigned to a personnel")
-
+        if self.pk:
+           old_ticket = Ticket.objects.get(pk=self.pk)
+           if old_ticket.status == Ticket.TicketStatuses.Resolved and old_ticket.status != self.status:
+               raise ValidationError("The Ticket Status can not be change from Resolved to anything.")
 
     class Priorities(models.TextChoices):
         low ="LOW","Low",

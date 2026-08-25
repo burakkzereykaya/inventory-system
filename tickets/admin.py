@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from tickets.models import Ticket
 from django.utils import timezone
 
@@ -10,7 +11,7 @@ class TicketAdmin(admin.ModelAdmin):
             obj.recorded_by =request.user
         if obj.status == Ticket.TicketStatuses.Resolved and obj.resolved_at is None:
             obj.resolved_at = timezone.now()
-
+        old_ticket=Ticket.objects.get(pk=obj.pk)
 
 
         super().save_model(request,obj,form,change)
