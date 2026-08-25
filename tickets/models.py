@@ -6,7 +6,7 @@ from django.conf import settings
 class Ticket(models.Model):
     def clean(self):
         super().clean()
-        if self.status == Ticket.Ticket_Statuses.In_Progress and self.assigned_to is None:
+        if self.status == Ticket.TicketStatuses.In_Progress and self.assigned_to is None:
             raise ValidationError("Tickets which status are IN PROGRESS must assigned to a personnel")
 
 
@@ -15,7 +15,7 @@ class Ticket(models.Model):
         medium ="MED","Medium",
         high ="HIGH","High",
         critical ="CRT","Critical",
-    class Ticket_Statuses(models.TextChoices):
+    class TicketStatuses(models.TextChoices):
         Queued="QUEUE","Queued",
         In_Progress="PROG","In Progress",
         Waiting="WAIT","Waiting",
@@ -30,7 +30,7 @@ class Ticket(models.Model):
     recorded_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="recorded_tickets")
     assigned_to=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="assigned_tickets",null=True,blank=True)
     priority=models.CharField(choices=Priorities.choices,max_length=4)
-    status=models.CharField(choices=Ticket_Statuses.choices,max_length=6)
+    status=models.CharField(choices=TicketStatuses.choices,max_length=6)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     resolved_at=models.DateTimeField(null=True,blank=True)
