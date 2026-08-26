@@ -54,3 +54,9 @@ class TicketStatusHistory(models.Model):
     changed_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT)
     changed_at=models.DateTimeField(auto_now_add=True)
     note=models.CharField(max_length=80,blank=True)
+
+class TicketComment(models.Model):
+    ticket=models.ForeignKey(Ticket,on_delete=models.PROTECT,related_name="comments")
+    author=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="ticket_comments")
+    comment=models.TextField(max_length=360)
+    created_at=models.DateTimeField(auto_now_add=True)
