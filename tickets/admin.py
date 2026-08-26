@@ -1,9 +1,16 @@
 from django.contrib import admin
-from django.core.exceptions import ValidationError
 from tickets.models import Ticket, TicketAssignmentHistory
 from django.utils import timezone
 
-admin.site.register(TicketAssignmentHistory)
+
+class TicketAssignmentHistoryInline(admin.TabularInline):
+    readonly_fields = ["previous_assignee","new_assignee","changed_by","changed_at","note"]
+    model=TicketAssignmentHistory
+    extra = 0
+    can_delete = False
+    def has_add_permission(self, request, obj=None):
+        return False
+
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
@@ -32,3 +39,4 @@ class TicketAdmin(admin.ModelAdmin):
                 changed_by=request.user,
             )
 
+    inlines = [TicketAssignmentHistoryInline]
