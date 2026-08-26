@@ -12,7 +12,8 @@ class Ticket(models.Model):
            old_ticket = Ticket.objects.get(pk=self.pk)
            if old_ticket.status == Ticket.TicketStatuses.Resolved and old_ticket.status != self.status:
                raise ValidationError("The Ticket Status can not be change from Resolved to anything.")
-
+           if old_ticket.status == Ticket.TicketStatuses.Resolved and old_ticket.assigned_to != self.assigned_to:
+               raise ValidationError("A resolved ticket can not be assigned to another personnel.")
     class Priorities(models.TextChoices):
         low ="LOW","Low",
         medium ="MED","Medium",

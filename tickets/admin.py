@@ -50,6 +50,21 @@ class TicketAdmin(admin.ModelAdmin):
         "reported_by__username",
         "assigned_to__username",
     ]
+    def get_readonly_fields(self, request, obj=None):
+        readonly = list(super().get_readonly_fields(request, obj))
+        user=request.user
+        if obj is None:
+            return readonly
+        if request.user.is_superuser:
+            pass
+        elif obj.assigned_to is None:
+            readonly.append("assigned_to")
+        elif obj.assigned_to == user:
+            pass
+        else:
+            readonly.append("assigned_to")
+        return readonly
+
     def save_model(self,request,obj,form,change):
         previous_assignee=None
         assignment_changed=False
