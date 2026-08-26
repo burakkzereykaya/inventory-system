@@ -7,6 +7,8 @@ class TicketCommentInline(admin.TabularInline):
     model=TicketComment
     extra=1
     can_delete = False
+    def has_change_permission(self, request, obj =None):
+        return False
 
 class TicketAssignmentHistoryInline(admin.TabularInline):
     readonly_fields = ["previous_assignee","new_assignee","changed_by","changed_at","note"]
