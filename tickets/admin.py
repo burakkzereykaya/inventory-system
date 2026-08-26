@@ -28,6 +28,7 @@ class TicketStatusHistoryInline(admin.TabularInline):
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
+    actions = ["take_ticket"]
     readonly_fields = ["recorded_by","resolved_at"]
     list_display = [
         "title",
@@ -50,6 +51,23 @@ class TicketAdmin(admin.ModelAdmin):
         "reported_by__username",
         "assigned_to__username",
     ]
+
+    @admin.action(description="Take selected ticket")
+    def take_ticket(self, request, queryset):
+        for ticket in queryset:
+            if ticket.status == Ticket.TicketStatuses.Resolved:
+                continue
+            if ticket.assigned_to is not None:
+                continue
+            ticket.assigned_to=request.user
+            ticket.save()
+            TicketAssignmentHistory.objects.create(
+                    ticket=ticket,
+                    previous_assignee=None,
+                    new_assignee=ticket.assigned_to,
+                    changed_by=request.user,
+                )
+
     def get_readonly_fields(self, request, obj=None):
         readonly = list(super().get_readonly_fields(request, obj))
         user=request.user
