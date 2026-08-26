@@ -70,17 +70,18 @@ class TicketAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         readonly = list(super().get_readonly_fields(request, obj))
-        user=request.user
-        if obj is None:
-            return readonly
+
         if request.user.is_superuser:
-            pass
+            return readonly
+
+        if obj is None:
+            readonly.append("assigned_to")
+            return readonly
         elif obj.assigned_to is None:
             readonly.append("assigned_to")
-        elif obj.assigned_to == user:
-            pass
-        else:
+        elif obj.assigned_to != request.user:
             readonly.append("assigned_to")
+
         return readonly
 
     def save_model(self,request,obj,form,change):
