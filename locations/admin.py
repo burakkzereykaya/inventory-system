@@ -20,6 +20,27 @@ class DeviceStatusHistoryInline(admin.TabularInline):
 @admin.register(Device)
 class DeviceAdmin(admin.ModelAdmin):
     readonly_fields = ["created_by","updated_by"]
+    list_display=[
+        "asset_id",
+        "serial_number",
+        "device_type",
+        "manufacturer",
+        "location",
+        "status",
+        "updated_at",
+    ]
+    list_filter=[
+        "status",
+        "device_type",
+        "manufacturer",
+        "location",
+    ]
+    search_fields=[
+        "asset_id",
+        "serial_number",
+        "status_note",
+        "general_note",
+    ]
     def save_model(self,request,obj,form,change):
         if not change:
             obj.created_by = request.user
