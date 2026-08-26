@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tickets.models import Ticket, TicketAssignmentHistory
+from tickets.models import Ticket, TicketAssignmentHistory,TicketStatusHistory
 from django.utils import timezone
 
 
@@ -11,6 +11,13 @@ class TicketAssignmentHistoryInline(admin.TabularInline):
     def has_add_permission(self, request, obj=None):
         return False
 
+class TicketStatusHistoryInline(admin.TabularInline):
+    readonly_fields = ["previous_status","new_status","changed_by","changed_at","note"]
+    model=TicketStatusHistory
+    extra = 0
+    can_delete = False
+    def has_add_permission(self, request, obj=None):
+        return False
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
@@ -18,6 +25,8 @@ class TicketAdmin(admin.ModelAdmin):
     def save_model(self,request,obj,form,change):
         previous_assignee=None
         assignment_changed=False
+        previous_status = None
+        status_changed = False
         if not change:
                 obj.recorded_by =request.user
                 if obj.assigned_to is not None:
@@ -29,6 +38,14 @@ class TicketAdmin(admin.ModelAdmin):
                     assignment_changed=True
         if obj.status == Ticket.TicketStatuses.Resolved and obj.resolved_at is None:
                 obj.resolved_at = timezone.now()
+        if not change:
+            previous_status = None
+            status_changed = True
+        else:
+            previous_status = old_ticket.status
+            if previous_status != obj.status:
+                status_changed = True
+
 
         super().save_model(request,obj,form,change)
         if assignment_changed:
@@ -38,5 +55,13 @@ class TicketAdmin(admin.ModelAdmin):
                 new_assignee=obj.assigned_to,
                 changed_by=request.user,
             )
+        if status_changed:
+            TicketStatusHistory.objects.create(
+                ticket=obj,
+                previous_status = previous_status,
+                new_status = obj.status,
+                changed_by = request.user,
+            )
 
-    inlines = [TicketAssignmentHistoryInline]
+    inlines = [TicketAssignmentHistoryInline,TicketStatusHistoryInline]
+

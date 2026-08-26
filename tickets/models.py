@@ -46,3 +46,11 @@ class TicketAssignmentHistory(models.Model):
         changed_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="history_changes")
         changed_at=models.DateTimeField(auto_now_add=True)
         note=models.CharField(max_length=80,blank=True)
+
+class TicketStatusHistory(models.Model):
+    ticket=models.ForeignKey(Ticket,on_delete=models.PROTECT,related_name="ticket_status_history")
+    previous_status=models.CharField(choices=Ticket.TicketStatuses.choices,max_length=6,blank=True,null=True)
+    new_status=models.CharField(choices=Ticket.TicketStatuses.choices,max_length=6)
+    changed_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT)
+    changed_at=models.DateTimeField(auto_now_add=True)
+    note=models.CharField(max_length=80,blank=True)
