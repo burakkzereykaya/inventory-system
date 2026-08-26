@@ -1,7 +1,12 @@
 from django.contrib import admin
-from tickets.models import Ticket, TicketAssignmentHistory,TicketStatusHistory
+from tickets.models import Ticket, TicketAssignmentHistory, TicketStatusHistory, TicketComment
 from django.utils import timezone
 
+class TicketCommentInline(admin.TabularInline):
+    readonly_fields = ["author","created_at"]
+    model=TicketComment
+    extra=1
+    can_delete = False
 
 class TicketAssignmentHistoryInline(admin.TabularInline):
     readonly_fields = ["previous_assignee","new_assignee","changed_by","changed_at","note"]
@@ -63,5 +68,16 @@ class TicketAdmin(admin.ModelAdmin):
                 changed_by = request.user,
             )
 
-    inlines = [TicketAssignmentHistoryInline,TicketStatusHistoryInline]
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            if isinstance(instance,TicketComment):
+                if instance.pk is None:
+                    instance.author=request.user
+            instance.save()
+        formset.save_m2m()
+
+
+    inlines = [TicketAssignmentHistoryInline,TicketStatusHistoryInline,TicketCommentInline]
+
 
