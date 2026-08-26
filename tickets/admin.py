@@ -29,6 +29,27 @@ class TicketStatusHistoryInline(admin.TabularInline):
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     readonly_fields = ["recorded_by","resolved_at"]
+    list_display = [
+        "title",
+        "status",
+        "priority",
+        "assigned_to",
+        "reported_by",
+        "created_at",
+        "resolved_at",
+    ]
+    list_filter = [
+        "status",
+        "priority",
+        "assigned_to",
+        "created_at",
+    ]
+    search_fields = [
+        "title",
+        "description",
+        "reported_by__username",
+        "assigned_to__username",
+    ]
     def save_model(self,request,obj,form,change):
         previous_assignee=None
         assignment_changed=False
