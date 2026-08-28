@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Ticket</title>
+</head>
+<body>
+<h1>Create Ticket</h1>
+<a href="{% url 'create ticket' %}">Create Ticket</a>
+<form method="post">
+  {% csrf_token %}
+  {{form.as_p}}
+
+  <button type="submit" >Create Ticket</button>
+</form>
+
+</body>
+</html>
