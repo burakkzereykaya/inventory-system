@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ ticket.title}}</title>
+</head>
+<body>
+
+<h1>{{ ticket.title }}</h1>
+
+
+<p><strong>Description</strong>{{ ticket.description }}</p>
+<p><strong>Status</strong> {{ ticket.get_status_display }}</p>
+<p><strong>Priority</strong>{{ticket.get_priority_display }}</p>
+<p><strong>Assigned to</strong>{{ ticket.assigned_to }}</p>
+<p><strong>Reported by</strong>{{ ticket.reported_by }}</p>
+<p><strong>Created at</strong> {{ ticket.created_at }}</p>
+
+</body>
+</html>

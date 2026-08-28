@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Tickets</h1>
+  <table>
+    <thead>
+    <tr>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Priority</th>
+      <th>Assigned to</th>
+      <th>Reported by</th>
+      <th>Created at</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+        <tr>
+            <td>
+                <a href="{% url 'ticket_detail' ticket.id %}">
+                {{ticket.title}}
+                </a>
+            </td>
+          <td>   {{ticket.get_status_display}}</td>
+          <td>   {{ticket.get_priority_display}}</td>
+          <td>   {{ticket.assigned_to}}</td>
+          <td>   {{ticket.reported_by}}</td>
+          <td>   {{ticket.created_at}}</td>
+        </tr>
+        {% empty %}
+    <tr>
+      <td colspan="6">No tickets found.</td>
+    </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+</body>
+</html>
