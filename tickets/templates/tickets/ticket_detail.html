@@ -9,12 +9,22 @@
 <h1>{{ ticket.title }}</h1>
 
 
-<p><strong>Description</strong>{{ ticket.description }}</p>
-<p><strong>Status</strong> {{ ticket.get_status_display }}</p>
-<p><strong>Priority</strong>{{ticket.get_priority_display }}</p>
-<p><strong>Assigned to</strong>{{ ticket.assigned_to }}</p>
-<p><strong>Reported by</strong>{{ ticket.reported_by }}</p>
-<p><strong>Created at</strong> {{ ticket.created_at }}</p>
+<p><strong>Description:</strong>{{ ticket.description }}</p>
+<p><strong>Status:</strong> {{ ticket.get_status_display }}</p>
+<p><strong>Priority:</strong>{{ticket.get_priority_display }}</p>
+<p><strong>Assigned to:</strong>{{ ticket.assigned_to }}</p>
+<p><strong>Reported by:</strong>{{ ticket.reported_by }}</p>
+<p><strong>Created at:</strong> {{ ticket.created_at }}</p>
+
+<h2>Comments</h2>
+
+{% for comment in comments %}
+    <p><strong>Author:</strong>{{comment.author}}</p>
+    <p><strong>Created At:</strong>{{comment.created_at}}</p>
+    <p>{{comment.comment}}</p>
+{% empty %}
+    <p>No comments yet.</p>
+{% endfor %}
 
 </body>
 </html>
