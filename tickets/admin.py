@@ -78,9 +78,9 @@ class TicketAdmin(admin.ModelAdmin):
             readonly.append("assigned_to")
             return readonly
         elif obj.assigned_to is None:
-            readonly.append("assigned_to")
+            readonly.extend(["assigned_to","status"])
         elif obj.assigned_to != request.user:
-            readonly.append("assigned_to")
+            readonly.extend(["assigned_to","status"])
 
         return readonly
 

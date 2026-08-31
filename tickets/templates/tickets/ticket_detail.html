@@ -42,6 +42,23 @@
         {% csrf_token %}
         <button type="submit" name="take_ticket">Take Ticket</button>
     </form>
-{% end_if %}
+{% endif %}
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{message }}</p>
+    {% endfor %}
+{% endif %}
+
+{% if status_form %}
+    <h2>Update Status</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{status_form.as_p}}
+        <button type="submit" name="update_status">Update Status</button>
+    </form>
+{% endif %}
+
 </body>
 </html>
