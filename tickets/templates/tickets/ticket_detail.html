@@ -26,5 +26,22 @@
     <p>No comments yet.</p>
 {% endfor %}
 
+{% if comment_form %}
+<h2>Add Comments</h2>
+
+    <form method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+
+    <button type="submit">Add Comment</button>
+    </form>
+{% endif %}
+
+{% if  can_take_ticket %}
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="take_ticket">Take Ticket</button>
+    </form>
+{% end_if %}
 </body>
 </html>
