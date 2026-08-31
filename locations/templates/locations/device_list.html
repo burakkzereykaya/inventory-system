@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+        <thead>
+        <tr>
+          <th>Asset ID</th>
+          <th>Device Type</th>
+          <th>Manufacturer</th>
+          <th>Location</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+    <tbody>
+    {% for device in devices %}
+    <tr>
+    <td>{{device.asset_id}}</td>
+    <td>{{device.device_type}}</td>
+     <td>{{device.manufacturer}}</td>
+     <td>{{device.location}}</td>
+     <td>{{device.get_status_display}}</td>
+    </tr>
+    <tr>
+    {% empty %}
+        <td colspan="5">No Devices found.</td>
+    </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

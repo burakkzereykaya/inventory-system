@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import  login_required
-from .models import Ticket, TicketAssignmentHistory,TicketStatusHistory
+from .models import Ticket, TicketAssignmentHistory,TicketStatusHistory,Device
 from .forms import TicketForm,TicketCommentForm,TicketStatusForm
 from django.contrib import messages
 from django.utils import timezone
@@ -16,6 +16,8 @@ def ticket_list(request):
 
 
     return render(request,"tickets/ticket_list.html",context)
+
+
 
 @login_required
 def ticket_detail(request, ticket_id):
