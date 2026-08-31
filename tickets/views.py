@@ -23,6 +23,11 @@ def ticket_detail(request, ticket_id):
     status_form =None
     ticket = get_object_or_404(Ticket,pk=ticket_id)
     comments=ticket.comments.all()
+    status_history=(
+               ticket.ticket_status_history
+               .all()
+               .order_by("-changed_at")
+    )
 
     can_update_status = (
             request.user.is_superuser
@@ -119,6 +124,7 @@ def ticket_detail(request, ticket_id):
     "comment_form": comment_form,
     "can_take_ticket": can_take_ticket,
     "status_form":status_form,
+    "status_history":status_history,
     }
 
     return render(request,"tickets/ticket_detail.html",context)
