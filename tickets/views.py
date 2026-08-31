@@ -28,7 +28,11 @@ def ticket_detail(request, ticket_id):
                .all()
                .order_by("-changed_at")
     )
-
+    assignment_history=(
+        ticket.ticket_assignment_history
+        .all()
+        .order_by("changed-at")
+    )
     can_update_status = (
             request.user.is_superuser
             or (
@@ -125,6 +129,7 @@ def ticket_detail(request, ticket_id):
     "can_take_ticket": can_take_ticket,
     "status_form":status_form,
     "status_history":status_history,
+    "assignment_history":assignment_history,
     }
 
     return render(request,"tickets/ticket_detail.html",context)

@@ -75,6 +75,19 @@
     <p>No status history yet.</p>
 {% endfor %}
 
+<h2>Assignment History</h2>
+
+{% for history in assignment_history %}
+    <p><strong>Previous Assignee:</strong>{{history.previous_assignee}}</p>
+    <p><strong>New Assignee:</strong>{{history.new-assignee}}</p>
+    <p><strong>Changed By:</strong>{{history.changed_by}}</p>
+    <p><strong>Changed At:</strong>{{history.changed_at}}</p>
+    <p><strong>Note:</strong>{{history.note}}</p>
+<hr>
+{% empty %}
+    <p>No Assignment history found</p>
+{% endfor %}
+
 
 </body>
 </html>
