@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ ticket.title}}</title>
-</head>
-<body>
-
+{% extends "core/base.html" %}
+{% block content %}
 <h1>{{ ticket.title }}</h1>
 
 
@@ -87,7 +81,8 @@
 {% empty %}
     <p>No Assignment history found</p>
 {% endfor %}
+ <a href="{% url 'ticket_list' %}">
+   <p>Back to the Ticket List</p>
+ </a>
 
-
-</body>
-</html>
+{% endblock %}

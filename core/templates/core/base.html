@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Navigation</h1>
+    <a href="{% url 'dashboard' %}">Dashboard</a>
+    <a href="{% url 'ticket_list' %}">Tickets</a>
+    <a href="{% url 'device_list' %}">Devices</a>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+
+    {% block content %}
+
+    {% endblock %}
+
+</body>
+</html>

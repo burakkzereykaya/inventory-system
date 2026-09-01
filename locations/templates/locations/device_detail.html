@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "core/base.html" %}
+{% block content %}
   <h1>Device Detail</h1>
   <p><strong> Asset ID:</strong>{{device.asset_id}}</p>
   <p><strong>Serial Number:</strong>{{device.serial_number}}</p>
@@ -41,5 +36,8 @@
   {% empty %}
   <p>There is no history record for this device.</p>
   {% endfor %}
-</body>
-</html>
+ <a href="{% url 'device_list' %}">
+   <p>Back to the Device List</p>
+ </a>
+{% endblock %}
+{% extends "base.html" %}

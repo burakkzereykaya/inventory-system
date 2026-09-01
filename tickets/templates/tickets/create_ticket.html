@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create Ticket</title>
-</head>
-<body>
+{% extends "core/base.html" %}
+{% block content %}
 <h1>Create Ticket</h1>
 <a href="{% url 'create ticket' %}">Create Ticket</a>
 <form method="post">
@@ -14,5 +9,5 @@
   <button type="submit" >Create Ticket</button>
 </form>
 
-</body>
-</html>
+{% endblock %}
+{% endblock %}
