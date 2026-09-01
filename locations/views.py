@@ -18,8 +18,16 @@ def device_list(request):
 def device_detail(request,device_id):
 
     device = get_object_or_404(Device,pk=device_id)
+    network_interface = device.network_interfaces.all()
+    status_history=(
+        device.status_history
+        .all()
+        .order_by("-gchanged_at")
+    )
     context={
-        "device":device
+        "device":device,
+        "network_interfaces":network_interface,
+        "status_history":status_history,
     }
 
 

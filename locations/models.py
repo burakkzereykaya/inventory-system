@@ -77,7 +77,7 @@ class NetworkInterface(models.Model):
     name=models.CharField(max_length=50)
     mac_address=models.CharField(max_length=20)
     network_interface_type=models.CharField(max_length=10,choices=NetworkInterfaceType.choices)
-    device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    device = models.ForeignKey(Device, on_delete=models.CASCADE,related_name="network_interfaces")
 
     class Meta:
         constraints=[
@@ -92,7 +92,7 @@ class IPAddress(models.Model):
     ip_address=models.GenericIPAddressField()
     prefix=models.PositiveSmallIntegerField()
     assignment_method=models.CharField(max_length=4,choices=AssignmentMethod.choices)
-    network_interface=models.ForeignKey(NetworkInterface,on_delete=models.CASCADE)
+    network_interface=models.ForeignKey(NetworkInterface,on_delete=models.CASCADE,related_name="ip_addresses")
     def clean(self):
         super().clean()
         version_checker= ip_address(self.ip_address).version

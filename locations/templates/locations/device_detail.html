@@ -18,5 +18,28 @@
   <p><strong>Updated At:</strong>{{device.updated_at}}</p>
   <p><strong>Created By:</strong>{{device.created_by}}</p>
   <p><strong>Updated By:</strong>{{device.updated_by}}</p>
+  {% for interface in network_interfaces %}
+    <p><strong>Interface Name</strong>{{interface.name}}</p>
+    <p><strong>Interface Type</strong>{{interface.type}}</p>
+    <p><strong>MAC Address</strong>{{interface.mac_address}}</p>
+        {% for ip in interface.ip_addresses.all %}
+          <p><strong>IP Address</strong>{{ip.ip_address}}</p>
+          <p><strong>Prefix</strong>{{ip.prefix}}</p>
+          <p><strong>Assignment Method (Static / DHCP)</strong>{{ip.get_assignment_method_display}}</p>
+        {% empty %}
+          <p>There is no ip record for this interface.</p>
+        {% endfor %}
+    {% empty %}
+    <p>There is no network record for this device.</p>
+    {% endfor %}
+  {% for history in status_history %}
+    <p><strong>Previous Status</strong>{{history.get_previous_status_display}}</p>
+    <p><strong>New Status</strong>{{history.get_new_status_display}}</p>
+    <p><strong>Status Note</strong>{{history.status_note}}</p>
+    <p><strong>Changed By</strong>{{history.changed_by}}</p>
+    <p><strong>Changed At</strong>{{history.changed_at}}</p>
+  {% empty %}
+  <p>There is no history record for this device.</p>
+  {% endfor %}
 </body>
 </html>
