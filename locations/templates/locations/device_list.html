@@ -18,12 +18,17 @@
     <tbody>
     {% for device in devices %}
     <tr>
-    <td>{{device.asset_id}}</td>
+    <td>
+        <a href="{% url 'device_detail' device.id %}">
+            {{device.asset_id}}
+        </a>
+           </td>
     <td>{{device.device_type}}</td>
      <td>{{device.manufacturer}}</td>
      <td>{{device.location}}</td>
      <td>{{device.get_status_display}}</td>
     </tr>
+
     <tr>
     {% empty %}
         <td colspan="5">No Devices found.</td>
