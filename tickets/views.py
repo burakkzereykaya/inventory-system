@@ -136,7 +136,7 @@ def ticket_detail(request, ticket_id):
 
     return render(request,"tickets/ticket_detail.html",context)
 
-@login_required()
+@login_required
 def create_ticket(request):
     if request.method == "POST":
         form=TicketForm(request.POST)
@@ -156,3 +156,4 @@ def create_ticket(request):
             "form":form
         }
     return render(request,"tickets/create_ticket.html",context)
+

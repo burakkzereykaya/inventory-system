@@ -136,3 +136,24 @@ def add_ip_address(request,interface_id):
     }
 
     return render(request,"locations/add_ip_address.html",context)
+
+@login_required
+@permission_required("locations.change_networkinterface",raise_exception=True)
+def edit_network_interface(request,interface_id):
+    interface=get_object_or_404(NetworkInterface,pk=interface_id)
+    if request.method == "POST":
+        form=NetworkInterfaceForm(request.POST,instance=interface)
+        if form.is_valid():
+
+            interface=form.save()
+
+            return redirect("device_detail",device_id=interface.device.id)
+    else:
+        form=NetworkInterfaceForm(instance=interface)
+
+    context={
+        "form":form,
+        "interface":interface,
+    }
+
+    return render(request,"locations/edit_network_interface.html",context)
