@@ -39,4 +39,8 @@
  <a href="{% url 'device_list' %}">
    <p>Back to the Device List</p>
  </a>
+
+  {% if perms.locations.change_device %}
+<a href="{% url 'edit_device' device.id %}">Edit Device</a>
+   {% endif %}
 {% endblock %}
