@@ -16,10 +16,16 @@
   {% if perms.locations.add_networkinterface %}
     <a href="{% url 'add_network_interface' device.id %}">Add Network Interface</a>
   {% endif %}
+
+{% if perms.locations.view_networkinterface %}
   {% for interface in network_interfaces %}
+    {% if perms.locations.add_ipaddress %}
+    <a href="{% url 'add_ip_address' interface.id %}">Add Ip address</a>
+    {% endif %}
     <p><strong>Interface Name</strong>{{interface.name}}</p>
-    <p><strong>Interface Type</strong>{{interface.type}}</p>
+    <p><strong>Interface Type</strong>{{interface.get_network_interface_type_display}}</p>
     <p><strong>MAC Address</strong>{{interface.mac_address}}</p>
+    {% if perms.locations.view_ipaddress %}
         {% for ip in interface.ip_addresses.all %}
           <p><strong>IP Address</strong>{{ip.ip_address}}</p>
           <p><strong>Prefix</strong>{{ip.prefix}}</p>
@@ -27,9 +33,13 @@
         {% empty %}
           <p>There is no ip record for this interface.</p>
         {% endfor %}
+    {% endif %}
     {% empty %}
     <p>There is no network record for this device.</p>
     {% endfor %}
+{% endif %}
+
+{% if perms.locations.view_devicestatushistory %}
   {% for history in status_history %}
     <p><strong>Previous Status</strong>{{history.get_previous_status_display}}</p>
     <p><strong>New Status</strong>{{history.get_new_status_display}}</p>
@@ -39,6 +49,7 @@
   {% empty %}
   <p>There is no history record for this device.</p>
   {% endfor %}
+{% endif %}
  <a href="{% url 'device_list' %}">
    <p>Back to the Device List</p>
  </a>
@@ -46,4 +57,5 @@
   {% if perms.locations.change_device %}
 <a href="{% url 'edit_device' device.id %}">Edit Device</a>
    {% endif %}
+
 {% endblock %}

@@ -47,10 +47,6 @@ class Command(BaseCommand):
 
             ("locations","view_device"),
 
-            ("locations","view_networkinterface"),
-
-            ("locations","view_ipaddress"),
-
             ("locations","view_manufacturer"),
 
             ("locations","view_devicetype"),
