@@ -1,6 +1,7 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render,get_object_or_404
+from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import render, get_object_or_404, redirect
 
+from locations.forms import DeviceForm
 from locations.models import Device
 
 
@@ -22,7 +23,7 @@ def device_detail(request,device_id):
     status_history=(
         device.status_history
         .all()
-        .order_by("-gchanged_at")
+        .order_by("-changed_at")
     )
     context={
         "device":device,
@@ -33,3 +34,21 @@ def device_detail(request,device_id):
 
     return render(request,"locations/device_detail.html",context)
 
+@login_required
+@permission_required('locations.add_device',raise_exception=True)
+def create_device(request):
+    if request.method == "POST":
+        form=DeviceForm(request.POST)
+        if form.is_valid():
+            device = form.save(commit=False)
+            device.created_by=request.user
+            device.updated_by=request.user
+            device.save()
+            return redirect("device_detail",device_id=device.pk)
+
+    else:
+        form=DeviceForm()
+    context={
+            "form":form
+        }
+    return render(request,"locations/create_device.html",context)

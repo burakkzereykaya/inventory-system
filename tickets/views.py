@@ -33,7 +33,7 @@ def ticket_detail(request, ticket_id):
     assignment_history=(
         ticket.ticket_assignment_history
         .all()
-        .order_by("changed-at")
+        .order_by("-changed_at")
     )
     can_update_status = (
             request.user.is_superuser

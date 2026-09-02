@@ -11,13 +11,20 @@
         </tr>
         </thead>
     <tbody>
+    {% if  perms.locations.add_device %}
+        <a href="{% url 'create_device' %}">Add Device</a>
+
+            {% endif %}
+
     {% for device in devices %}
     <tr>
     <td>
+
         <a href="{% url 'device_detail' device.id %}">
             {{device.asset_id}}
         </a>
            </td>
+
     <td>{{device.device_type}}</td>
      <td>{{device.manufacturer}}</td>
      <td>{{device.location}}</td>
