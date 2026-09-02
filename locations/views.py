@@ -3,8 +3,8 @@ from logging import raiseExceptions
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, get_object_or_404, redirect
 
-from locations.forms import DeviceForm
-from locations.models import Device, DeviceStatusHistory
+from locations.forms import DeviceForm, NetworkInterfaceForm, IpAddressForm
+from locations.models import Device, DeviceStatusHistory, NetworkInterface
 
 
 @login_required
@@ -91,3 +91,48 @@ def edit_device(request,device_id):
         "device": device,
     }
     return render(request,"locations/edit_device.html",context)
+
+@login_required
+@permission_required("locations.add_networkinterface",raise_exception=True)
+def add_network_interface(request,device_id):
+    device=get_object_or_404(Device,pk=device_id)
+    if request.method == "POST":
+        form=NetworkInterfaceForm(request.POST)
+        if form.is_valid():
+            interface=form.save(commit=False)
+            interface.device=device
+            interface.save()
+            return redirect("device_detail",device_id=device.id)
+    else:
+        form=NetworkInterfaceForm()
+
+    context={
+        "form":form,
+        "device":device,
+    }
+    return render(request,"locations/add_network_interface.html",context)
+
+@login_required
+@permission_required("locations.add_ipaddress", raise_exception=True)
+def add_ip_address(request,interface_id):
+    interface=get_object_or_404(NetworkInterface,pk=interface_id)
+
+    if request.method == "POST":
+           form = IpAddressForm(request.POST)
+           if form.is_valid():
+                ip_address=form.save(commit=False)
+                ip_address.network_interface = interface
+                ip_address.save()
+
+                return redirect("device_detail",device_id=interface.device.id)
+
+    else:
+        form=IpAddressForm()
+
+
+    context={
+        "form":form,
+        "interface":interface,
+    }
+
+    return render(request,"locations/add_ip_address.html",context)

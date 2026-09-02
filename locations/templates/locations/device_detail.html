@@ -13,6 +13,9 @@
   <p><strong>Updated At:</strong>{{device.updated_at}}</p>
   <p><strong>Created By:</strong>{{device.created_by}}</p>
   <p><strong>Updated By:</strong>{{device.updated_by}}</p>
+  {% if perms.locations.add_networkinterface %}
+    <a href="{% url 'add_network_interface' device.id %}">Add Network Interface</a>
+  {% endif %}
   {% for interface in network_interfaces %}
     <p><strong>Interface Name</strong>{{interface.name}}</p>
     <p><strong>Interface Type</strong>{{interface.type}}</p>
