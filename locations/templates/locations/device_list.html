@@ -8,19 +8,34 @@
   value="{{search}}"
   placeholder="Asset ID or Serial Number"
   >
-    <select name="status">All Statuses
-    {% for value,label in status_choices %}
-        <option value="{{ value }}"
-                {% if status == value %}selected{% endif %}>
-            {{ label }}
+
+
+<button type="submit">Search</button>
+
+    <select name="location">
+        <option value="">All Locations</option>
+        {% for loc in locations %}
+            <option value="{{loc.id}}"
+                    {% if location == loc.id|stringformat:"s" %}selected{% endif %}>
+        {{ loc }}
         </option>
         {% endfor %}
     </select>
-<button type="submit">Search</button>
-  {% if search %}
+
+    <select name="status">
+        <option value="">All Statuses</option>
+        {% for value,label in status_choices %}
+            <option value="{{ value }}"
+                {% if status == value %}selected{% endif %}>
+            {{label}}
+        </option>
+        {% endfor %}
+    </select>
+</form>
+
+    {% if search  or status or location %}
     <a href="{% url 'device_list' %}">Clear</a>
     {% endif %}
-</form>
 
 <table>
         <thead>

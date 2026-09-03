@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 
 from locations.forms import DeviceForm, NetworkInterfaceForm, IpAddressForm
-from locations.models import Device, DeviceStatusHistory, NetworkInterface, IPAddress
+from locations.models import Device, DeviceStatusHistory, NetworkInterface, IPAddress, Location
 
 
 @login_required
@@ -13,19 +13,25 @@ def device_list(request):
     devices=Device.objects.all()
     search=request.GET.get("search","")
     status=request.GET.get("status","")
+    location=request.GET.get("location","")
+    locations=Location.objects.all()
     if search:
-        devices=Device.objects.filter(
+        devices=devices.filter(
             Q(asset_id__icontains=search)
             |
             Q(serial_number__icontains=search)
         )
     if status:
         devices =devices.filter(status=status)
+    if location:
+        devices=devices.filter(location_id=location)
     context={
         "devices":devices,
         "search":search,
         "status":status,
         "status_choices":Device.Statuses.choices,
+        "location":location,
+        "locations":locations,
     }
 
     return render(request,"locations/device_list.html",context)
