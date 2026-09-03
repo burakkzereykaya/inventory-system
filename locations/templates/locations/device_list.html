@@ -17,7 +17,7 @@
         {% for loc in locations %}
             <option value="{{loc.id}}"
                     {% if location == loc.id|stringformat:"s" %}selected{% endif %}>
-        {{ loc }}
+                {{ loc }}
         </option>
         {% endfor %}
     </select>
@@ -31,11 +31,24 @@
         </option>
         {% endfor %}
     </select>
+
+    <select name="manufacturer">
+        <option value="">All Manufacturers</option>
+            {% for manu in manufacturers %}
+                <option value="{{manu.id}}"
+                        {% if manufacturer == manu.id|stringformat:"s" %}selected{% endif %}>
+                {{manu}}
+        </option>
+        {% endfor %}
+    </select>
+
+    {% if search  or status or location or manufacturer %}
+        <a href="{% url 'device_list' %}">Clear</a>
+    {% endif %}
+
 </form>
 
-    {% if search  or status or location %}
-    <a href="{% url 'device_list' %}">Clear</a>
-    {% endif %}
+
 
 <table>
         <thead>
