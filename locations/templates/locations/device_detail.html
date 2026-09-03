@@ -25,18 +25,26 @@
     <p><strong>Interface Name</strong>{{interface.name}}</p>
     <p><strong>Interface Type</strong>{{interface.get_network_interface_type_display}}</p>
     <p><strong>MAC Address</strong>{{interface.mac_address}}</p>
-    {% if perms.locations.view_ipaddress %}
-        {% for ip in interface.ip_addresses.all %}
-          <p><strong>IP Address</strong>{{ip.ip_address}}</p>
-          <p><strong>Prefix</strong>{{ip.prefix}}</p>
-          <p><strong>Assignment Method (Static / DHCP)</strong>{{ip.get_assignment_method_display}}</p>
-        {% empty %}
-          <p>There is no ip record for this interface.</p>
-        {% endfor %}
+    {% if perms.locations.change_networkinterface %}
+    <a href="{% url 'edit_network_interface' interface.id %}">Edit Network Interface</a>
     {% endif %}
-    {% empty %}
-    <p>There is no network record for this device.</p>
-    {% endfor %}
+      {% if perms.locations.view_ipaddress %}
+          {% for ip in interface.ip_addresses.all %}
+
+            <p><strong>IP Address</strong>{{ip.ip_address}}</p>
+            <p><strong>Prefix</strong>{{ip.prefix}}</p>
+            <p><strong>Assignment Method (Static / DHCP)</strong>{{ip.get_assignment_method_display}}</p>
+
+            {% if perms.locations.change_ipaddress %}
+              <a href="{% url 'edit_ip_address' ip.id %}">Edit IP Address</a>
+              {% endif %}
+          {% empty %}
+            <p>There is no ip record for this interface.</p>
+          {% endfor %}
+      {% endif %}
+      {% empty %}
+      <p>There is no network record for this device.</p>
+      {% endfor %}
 {% endif %}
 
 {% if perms.locations.view_devicestatushistory %}

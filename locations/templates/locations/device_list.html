@@ -1,5 +1,27 @@
 {% extends "core/base.html" %}
 {% block content %}
+
+<form method="get">Search - {{search}}
+  <input
+  type="text"
+  name="search"
+  value="{{search}}"
+  placeholder="Asset ID or Serial Number"
+  >
+    <select name="status">All Statuses
+    {% for value,label in status_choices %}
+        <option value="{{ value }}"
+                {% if status == value %}selected{% endif %}>
+            {{ label }}
+        </option>
+        {% endfor %}
+    </select>
+<button type="submit">Search</button>
+  {% if search %}
+    <a href="{% url 'device_list' %}">Clear</a>
+    {% endif %}
+</form>
+
 <table>
         <thead>
         <tr>

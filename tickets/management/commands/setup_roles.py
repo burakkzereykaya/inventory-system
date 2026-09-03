@@ -38,7 +38,7 @@ class Command(BaseCommand):
 
             ("locations", "add_ipaddress"),
             ("locations", "change_ipaddress"),
-            ("locations","view_ipaddress"),
+            ("locations", "view_ipaddress"),
 
         ]
         employee_permissions=[

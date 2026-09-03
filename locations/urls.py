@@ -9,5 +9,6 @@ urlpatterns=[
     path("devices/<int:device_id>/",views.device_detail,name="device_detail"),
     path("devices/<int:device_id>/interfaces/create/",views.add_network_interface,name="add_network_interface"),
     path("interfaces/<int:interface_id>/ips/create/",views.add_ip_address,name="add_ip_address"),
+    path("interfaces/<int:ip_id>/ips/edit",views.edit_ip_address,name="edit_ip_address"),
     path("interfaces/<int:interface_id>/edit/",views.edit_network_interface,name="edit_network_interface"),
 ]

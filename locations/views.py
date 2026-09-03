@@ -2,17 +2,30 @@ from logging import raiseExceptions
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Q
 
 from locations.forms import DeviceForm, NetworkInterfaceForm, IpAddressForm
-from locations.models import Device, DeviceStatusHistory, NetworkInterface
+from locations.models import Device, DeviceStatusHistory, NetworkInterface, IPAddress
 
 
 @login_required
 def device_list(request):
     devices=Device.objects.all()
-
+    search=request.GET.get("search","")
+    status=request.GET.get("status","")
+    if search:
+        devices=Device.objects.filter(
+            Q(asset_id__icontains=search)
+            |
+            Q(serial_number__icontains=search)
+        )
+    if status:
+        devices =devices.filter(status=status)
     context={
-        "devices":devices
+        "devices":devices,
+        "search":search,
+        "status":status,
+        "status_choices":Device.Statuses.choices,
     }
 
     return render(request,"locations/device_list.html",context)
@@ -157,3 +170,24 @@ def edit_network_interface(request,interface_id):
     }
 
     return render(request,"locations/edit_network_interface.html",context)
+
+@login_required
+@permission_required("locations.change_ipaddress",raise_exception=True)
+def edit_ip_address(request,ip_id):
+    ip_address=get_object_or_404(IPAddress,pk=ip_id)
+    if request.method=="POST":
+        form=IpAddressForm(request.POST,instance=ip_address)
+        if form.is_valid():
+            updated_ip=form.save()
+
+            return  redirect("device_detail",device_id=updated_ip.network_interface.device.id)
+    else:
+        form=IpAddressForm(instance=ip_address)
+
+    context={
+        "form":form,
+        "ip_address":ip_address,
+    }
+
+
+    return render(request,"locations/edit_ip_address.html",context)
