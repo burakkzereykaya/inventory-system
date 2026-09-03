@@ -1,7 +1,7 @@
 {% extends "core/base.html" %}
 {% block content %}
 <h1>Create Ticket</h1>
-<a href="{% url 'create ticket' %}">Create Ticket</a>
+<a href="{% url 'create_ticket' %}">Create Ticket</a>
 <form method="post">
   {% csrf_token %}
   {{form.as_p}}
@@ -9,5 +9,4 @@
   <button type="submit" >Create Ticket</button>
 </form>
 
-{% endblock %}
 {% endblock %}

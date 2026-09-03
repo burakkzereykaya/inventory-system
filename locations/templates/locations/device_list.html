@@ -42,7 +42,17 @@
         {% endfor %}
     </select>
 
-    {% if search  or status or location or manufacturer %}
+    <select name="device_type">
+        <option value="">All Device Types</option>
+        {% for device_type in device_types %}
+            <option value="{{value}}"
+                    {% if status == value %}selected{% endif %}>
+                    {{device_type}}
+                    </option>
+            {% endfor %}
+    </select>
+
+    {% if search  or status or location or manufacturer or device_type %}
         <a href="{% url 'device_list' %}">Clear</a>
     {% endif %}
 

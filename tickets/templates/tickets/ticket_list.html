@@ -1,6 +1,9 @@
 {% extends "core/base.html" %}
 {% block content%}
 <h1>Tickets</h1>
+    {% if perms.tickets.add_ticket %}
+        <a href="{% url 'create_ticket' %}">Create Ticket</a>
+    {% endif %}
   <table>
     <thead>
     <tr>

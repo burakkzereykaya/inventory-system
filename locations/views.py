@@ -5,18 +5,21 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 
 from locations.forms import DeviceForm, NetworkInterfaceForm, IpAddressForm
-from locations.models import Device, DeviceStatusHistory, NetworkInterface, IPAddress, Location, Manufacturer
+from locations.models import Device, DeviceStatusHistory, NetworkInterface, IPAddress, Location, Manufacturer, \
+    DeviceType
 
 
 @login_required
 def device_list(request):
     devices=Device.objects.all()
+    device_type=request.GET.get("device_type","")
     manufacturers=Manufacturer.objects.all()
     search=request.GET.get("search","")
     status=request.GET.get("status","")
     location=request.GET.get("location","")
     manufacturer=request.GET.get("manufacturer","")
     locations=Location.objects.all()
+    device_types=DeviceType.objects.all()
     if search:
         devices=devices.filter(
             Q(asset_id__icontains=search)
@@ -29,6 +32,9 @@ def device_list(request):
         devices=devices.filter(location_id=location)
     if manufacturer:
         devices=devices.filter(manufacturer_id=manufacturer)
+    if device_type:
+        devices=devices.filter(device_type_id=device_type)
+
     context={
         "devices":devices,
         "search":search,
@@ -38,6 +44,8 @@ def device_list(request):
         "locations":locations,
         "manufacturer":manufacturer,
         "manufacturers":manufacturers,
+        "device_type":device_type,
+        "device_types":device_types,
     }
 
     return render(request,"locations/device_list.html",context)
