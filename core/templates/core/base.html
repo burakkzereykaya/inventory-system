@@ -1,22 +1,30 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Inventory System</title>
+    <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
 </head>
 <body>
-    <h1>Navigation</h1>
+<nav class="navbar">
+    <h1>Inventory System</h1>
+
+    <div class="nav-links">
     <a href="{% url 'dashboard' %}">Dashboard</a>
     <a href="{% url 'ticket_list' %}">Tickets</a>
     <a href="{% url 'device_list' %}">Devices</a>
     <form method="post" action="{% url 'logout' %}">
       {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
-
+        <button class="logout-btn" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+<main class="content">
     {% block content %}
-
     {% endblock %}
+</main>
 
 </body>
 </html>
