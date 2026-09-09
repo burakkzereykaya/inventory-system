@@ -3,11 +3,11 @@
 
 <h1>Ip address - {{interface.name}}</h1>
 
-<form method="post">
+<form method="post" class="standard-form">
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit">Add Ip Address</button>
+    <button type="submit" class="action-btn">Add Ip Address</button>
 </form>
 
 {% endblock %}

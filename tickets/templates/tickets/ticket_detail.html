@@ -1,36 +1,60 @@
 {% extends "core/base.html" %}
 {% block content %}
+<div class="ticket-section">
 <h1>{{ ticket.title }}</h1>
 
+<h2>Ticket Information</h2>
+<div class="ticket-information">
 
-<p><strong>Description:</strong>{{ ticket.description }}</p>
-<p><strong>Status:</strong> {{ ticket.get_status_display }}</p>
-<p><strong>Priority:</strong>{{ticket.get_priority_display }}</p>
-<p><strong>Assigned to:</strong>{{ ticket.assigned_to }}</p>
-<p><strong>Reported by:</strong>{{ ticket.reported_by }}</p>
-<p><strong>Created at:</strong> {{ ticket.created_at }}</p>
-
-<h2>Comments</h2>
+<p><strong>Description: </strong>{{ ticket.description }}</p>
+<p>
+    <strong>Status: </strong>
+    <span class="ticket-status status-{{ ticket.status|lower }}">
+        {{ ticket.get_status_display }}
+    </span>
+</p>
+<p>
+    <strong>Priority: </strong>
+    <span class="priority priority-{{ ticket.priority|lower }}">
+        {{  ticket.get_priority_display }}
+    </span>
+    </p>
+<p><strong>Assigned to: </strong>{{ ticket.assigned_to }}</p>
+<p><strong>Reported by: </strong>{{ ticket.reported_by }}</p>
+<p><strong>Created at: </strong> {{ ticket.created_at }}</p>
+</div>
+    </div>
+<div class="ticket-section">
+<div class="comment-section">
+    <h2>Comments</h2>
 
 {% for comment in comments %}
-    <p><strong>Author:</strong>{{comment.author}}</p>
-    <p><strong>Created At:</strong>{{comment.created_at}}</p>
+    <div class="comment-card">
+    <p><strong>Author:</strong>{{  comment.author  }}</p>
+    <p><strong>Created At:</strong>{{  comment.created_at  }}</p>
     <p>{{comment.comment}}</p>
+    </div>
 {% empty %}
     <p>No comments yet.</p>
 {% endfor %}
 
+
 {% if comment_form %}
 <h2>Add Comments</h2>
 
-    <form method="post">
+    <form method="post" class="ticket-form">
     {% csrf_token %}
     {{ comment_form.as_p }}
 
-    <button type="submit">Add Comment</button>
+    <button type="submit"class="action-btn">Add Comment</button>
     </form>
 {% endif %}
+</div>
+</div>
 
+{% if can_take_ticket or messages %}
+<div class="ticket-section">
+<div class="assignment-actions">
 {% if  can_take_ticket %}
     <form method="post">
         {% csrf_token %}
@@ -43,44 +67,61 @@
         <p>{{message }}</p>
     {% endfor %}
 {% endif %}
+</div>
+</div>
+{% endif %}
+
+
+<div class="ticket-section">
+<div class="status-actions">
 
 {% if status_form %}
     <h2>Update Status</h2>
 
-    <form method="post">
+    <form method="post"class="ticket-form">
         {% csrf_token %}
         {{status_form.as_p}}
-        <button type="submit" name="update_status">Update Status</button>
+        <button type="submit"class="action_btn" name="update_status">Update Status</button>
     </form>
 {% endif %}
-
+</div>
+</div>
 
 <h2>Status History</h2>
-
+<div class="ticket-section">
+<div class="status-history">
 
 {% for history in status_history %}
+    <div class="history-card">
     <p><strong>Previous Status:</strong>{{ history.get_previous_status_display }}</p>
     <p><strong>New Status:</strong> {{ history.get_new_status_display }}</p>
-    <p><strong>Changed By:</strong>{{history.changed_by }}</p>
+    <p><strong>Changed By:</strong>{{  history.changed_by }}</p>
     <p><strong>Changed At:</strong>{{ history.changed_at }}</p>
     <p><strong>Note:</strong>{{ history.note }}</p>
-<hr>
+    </div>
 {% empty %}
     <p>No status history yet.</p>
 {% endfor %}
 
-<h2>Assignment History</h2>
+</div>
+    </div>
 
+<h2>Assignment History</h2>
+<div class="ticket-section">
+<div class="assignment-history">
 {% for history in assignment_history %}
+    <div class="history-card">
     <p><strong>Previous Assignee:</strong>{{history.previous_assignee}}</p>
     <p><strong>New Assignee:</strong>{{history.new_assignee}}</p>
     <p><strong>Changed By:</strong>{{history.changed_by}}</p>
     <p><strong>Changed At:</strong>{{history.changed_at}}</p>
     <p><strong>Note:</strong>{{history.note}}</p>
-<hr>
+    </div>
 {% empty %}
     <p>No Assignment history found</p>
 {% endfor %}
+</div>
+</div>
  <a href="{% url 'ticket_list' %}">
    <p>Back to the Ticket List</p>
  </a>

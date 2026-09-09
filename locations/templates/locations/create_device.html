@@ -2,12 +2,12 @@
 
 {% block content %}
     <h1>Create Device</h1>
-<a href="{% url 'create_device' %}">Create Device</a>
-<form method="post">
+
+<form method="post" class="standard-form">
   {% csrf_token %}
   {{form.as_p}}
 
-  <button type="submit" >Create Device</button>
+  <button type="submit" class="action-btn">Create Device</button>
 </form>
 
 {% endblock %}

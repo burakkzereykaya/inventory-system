@@ -2,11 +2,11 @@
 {% block content %}
 
 <h1>Edit IP Address - {{ip_address.ip_address}}</h1>
-<form method="post">
+<form method="post" class="standard-form">
   {% csrf_token %}
   {{form.as_p}}
 
-    <button type="submit">Save Changes</button>
+    <button type="submit" class="action-btn">Save Changes</button>
   </form>
 
 

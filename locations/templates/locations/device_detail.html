@@ -1,7 +1,9 @@
 {% extends "core/base.html" %}
 {% block content %}
   <h1>Device Detail</h1>
-  <p><strong> Asset ID:</strong>{{device.asset_id}}</p>
+<div class="device-section">
+  <h2>Device Information</h2>
+  <p><strong> Asset ID:</strong> {{device.asset_id}}</p>
   <p><strong>Serial Number:</strong>{{device.serial_number}}</p>
   <p><strong>Device Type:</strong>{{device.device_type}}</p>
   <p><strong>Manufacturer:</strong>{{device.manufacturer}}</p>
@@ -13,57 +15,94 @@
   <p><strong>Updated At:</strong>{{device.updated_at}}</p>
   <p><strong>Created By:</strong>{{device.created_by}}</p>
   <p><strong>Updated By:</strong>{{device.updated_by}}</p>
+</div>
+
   {% if perms.locations.add_networkinterface %}
-    <a href="{% url 'add_network_interface' device.id %}">Add Network Interface</a>
+    <a href="{% url 'add_network_interface' device.id %}" class="action-btn">Add Network Interface</a>
   {% endif %}
 
-{% if perms.locations.view_networkinterface %}
-  {% for interface in network_interfaces %}
-    {% if perms.locations.add_ipaddress %}
-    <a href="{% url 'add_ip_address' interface.id %}">Add Ip address</a>
-    {% endif %}
-    <p><strong>Interface Name</strong>{{interface.name}}</p>
-    <p><strong>Interface Type</strong>{{interface.get_network_interface_type_display}}</p>
-    <p><strong>MAC Address</strong>{{interface.mac_address}}</p>
-    {% if perms.locations.change_networkinterface %}
-    <a href="{% url 'edit_network_interface' interface.id %}">Edit Network Interface</a>
-    {% endif %}
-      {% if perms.locations.view_ipaddress %}
-          {% for ip in interface.ip_addresses.all %}
+    {% if perms.locations.view_networkinterface %}
 
-            <p><strong>IP Address</strong>{{ip.ip_address}}</p>
-            <p><strong>Prefix</strong>{{ip.prefix}}</p>
-            <p><strong>Assignment Method (Static / DHCP)</strong>{{ip.get_assignment_method_display}}</p>
+      <h2>Network Interfaces</h2>
 
-            {% if perms.locations.change_ipaddress %}
-              <a href="{% url 'edit_ip_address' ip.id %}">Edit IP Address</a>
-              {% endif %}
+      {% for interface in network_interfaces %}
+
+        <div class="network-interface">
+            <p><strong>Interface Name</strong> {{  interface.name  }}</p>
+
+            <p><strong>Interface Type</strong> {{  interface.get_network_interface_type_display  }}</p>
+
+            <p><strong>MAC Address</strong> {{  interface.mac_address  }}</p>
+
+            {% if perms.locations.add_ipaddress %}
+            <a href="{% url 'add_ip_address' interface.id %}" class="action-btn">Add Ip address</a>
+            {% endif %}
+
+            {% if perms.locations.change_networkinterface %}
+            <a href="{% url 'edit_network_interface' interface.id %}" class="action-btn secondary-btn">Edit Network Interface</a>
+            {% endif %}
+
+            {% if perms.locations.view_ipaddress %}
+
+              {% for ip in interface.ip_addresses.all %}
+
+                <div class="ip-address">
+                <p><strong>IP Address</strong> {{  ip.ip_address  }}</p>
+
+                <p><strong>Prefix</strong> {{  ip.prefix  }}</p>
+
+                <p><strong>Assignment Method (Static / DHCP)</strong> {{  ip.get_assignment_method_display  }}</p>
+
+                {% if perms.locations.change_ipaddress %}
+                  <a href="{% url 'edit_ip_address' ip.id %}" class="action-btn secondary-btn">Edit IP Address</a>
+                  {% endif %}
+                  </div>
+
+
           {% empty %}
             <p>There is no ip record for this interface.</p>
           {% endfor %}
       {% endif %}
-      {% empty %}
+
+      </div>
+
+  {% empty %}
       <p>There is no network record for this device.</p>
-      {% endfor %}
-{% endif %}
+  {% endfor %}
+
+  {% endif %}
+
+
 
 {% if perms.locations.view_devicestatushistory %}
+<h2>Device Status History</h2>
   {% for history in status_history %}
-    <p><strong>Previous Status</strong>{{history.get_previous_status_display}}</p>
-    <p><strong>New Status</strong>{{history.get_new_status_display}}</p>
-    <p><strong>Status Note</strong>{{history.status_note}}</p>
-    <p><strong>Changed By</strong>{{history.changed_by}}</p>
-    <p><strong>Changed At</strong>{{history.changed_at}}</p>
+<div class="device-status-history">
+    <p>
+      <strong>Previous Status</strong>
+      <span class="status-badge status-{{ history.previous_status|lower }}">
+      {{  history.get_previous_status_display  }}
+    </span>
+    </p>
+    <p>
+      <strong>New Status</strong>
+      <span class="status-badge status-{{ history.new_status|lower }}">
+        {{  history.get_new_status_display  }}
+      </span>
+    </p>
+    <p><strong>Status Note</strong>{{  history.status_note  }}</p>
+    <p><strong>Changed By</strong>{{  history.changed_by  }}</p>
+    <p><strong>Changed At</strong>{{  history.changed_at  }}</p>
+</div>
   {% empty %}
   <p>There is no history record for this device.</p>
   {% endfor %}
 {% endif %}
- <a href="{% url 'device_list' %}">
+ <a href="{% url 'device_list' %}"class="back-btn">
    <p>Back to the Device List</p>
  </a>
 
   {% if perms.locations.change_device %}
-<a href="{% url 'edit_device' device.id %}">Edit Device</a>
+<a href="{% url 'edit_device' device.id %}"class="action-btn secondary-btn">Edit Device</a>
    {% endif %}
-
 {% endblock %}

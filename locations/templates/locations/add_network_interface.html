@@ -3,11 +3,11 @@
 {% block content %}
 <h1>Add Network Interface - {{device.asset_id }}</h1>
 
-<form method="post">
+<form method="post"class="standard-form">
   {% csrf_token %}
   {{ form.as_p }}
 
-  <button type="submit">Add Interface</button>
+  <button type="submit" class="action-btn">Add Interface</button>
 </form>
 
 

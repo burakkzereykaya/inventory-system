@@ -3,20 +3,25 @@
     <h1>Inventory Tracking System</h1>
     <p>Welcome, {{ request.user.username}}</p>
 
-<div class="dashboards-card">
+<div class="dashboards-cards">
+    <a href="{% url 'device_list' %}" class="card-link">
     <div class="card">
         <h3>Total Devices</h3>
-        <p>0</p>
+        <p>{{total_devices}}</p>
     </div>
+    </a>
 
+    <a href="{% url 'device_list' %}?status=AC" class="card-link">
     <div class="card">
         <h3>Active Devices</h3>
-        <p>0</p>
+        <p>{{active_devices}}</p>
     </div>
-
+    </a>
+    <a href="{% url 'ticket_list' %}" class="card-link">
     <div class="card">
-        <h3>Open  Tickets</h3>
-        <p>0</p>
+        <h3>Open Tickets</h3>
+        <p>{{open_tickets}}</p>
     </div>
+    </a>
 </div>
 {% endblock %}

@@ -3,11 +3,11 @@
 
 
     <h1>Edit Device - {{device.asset_id}}</h1>
-<form method="post">
+<form method="post"class="standard-form">
   {% csrf_token %}
   {{form.as_p}}
 
-  <button type="submit">Save Changes</button>
+  <button type="submit"class="action-btn">Save Changes</button>
 </form>
 
 {% endblock %}

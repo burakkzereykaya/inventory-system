@@ -1,7 +1,7 @@
 {% extends "core/base.html" %}
 {% block content %}
 
-<form method="get">Search - {{search}}
+<form method="get" class="filter-bar">Search - {{search}}
   <input
   type="text"
   name="search"
@@ -53,14 +53,14 @@
     </select>
 
     {% if search  or status or location or manufacturer or device_type %}
-        <a href="{% url 'device_list' %}">Clear</a>
+        <a href="{% url 'device_list' %}" class="clear-btn">Clear</a>
     {% endif %}
 
 </form>
 
 
 
-<table>
+<table class="device-table">
         <thead>
         <tr>
           <th>Asset ID</th>
@@ -72,7 +72,7 @@
         </thead>
     <tbody>
     {% if  perms.locations.add_device %}
-        <a href="{% url 'create_device' %}">Add Device</a>
+        <a href="{% url 'create_device' %}" class="add-btn">Add Device</a>
 
             {% endif %}
 
@@ -88,7 +88,11 @@
     <td>{{device.device_type}}</td>
      <td>{{device.manufacturer}}</td>
      <td>{{device.location}}</td>
-     <td>{{device.get_status_display}}</td>
+     <td>
+         <span class="status-badge status-{{device.status|lower}}">
+             {{device.get_status_display}}
+         </span>
+     </td>
     </tr>
 
     <tr>

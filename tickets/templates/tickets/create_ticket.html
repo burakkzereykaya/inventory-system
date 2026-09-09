@@ -1,12 +1,13 @@
 {% extends "core/base.html" %}
 {% block content %}
 <h1>Create Ticket</h1>
-<a href="{% url 'create_ticket' %}">Create Ticket</a>
-<form method="post">
+
+
+<form method="post" class="standard-form">
   {% csrf_token %}
   {{form.as_p}}
 
-  <button type="submit" >Create Ticket</button>
+  <button type="submit" class="action-btn">Create Ticket</button>
 </form>
 
 {% endblock %}
