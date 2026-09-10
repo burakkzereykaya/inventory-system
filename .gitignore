@@ -6,6 +6,7 @@ __pycache__/
 *.pyo
 
 .idea/
+desktop.ini
 
 db.sqlite3
 
