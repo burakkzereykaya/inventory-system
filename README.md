@@ -176,7 +176,7 @@ View basic device and location information
 
 The dashboard provides quick access to device statistics and open support tickets.
 
-
+```
 ## Screenshots
 
 ### Dashboard
