@@ -58,6 +58,8 @@ class Device(models.Model):
     created_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="created_devices")
     updated_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="updated_devices")
 
+    def __str__(self):
+        return self.asset_id
 
     class Meta:
         constraints=[

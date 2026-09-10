@@ -4,7 +4,54 @@
     {% if perms.tickets.add_ticket %}
         <a href="{% url 'create_ticket' %}" class="add-btn">Create Ticket</a>
     {% endif %}
-  <table class="ticket-table">
+    <form method="get" class="filter-bar">
+        <select name="status">
+            <option value="">All Statuses</option>
+
+            {% for value,label in status_choices %}
+            <option value="{{ value }}"
+                {% if status == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+            {% endfor %}
+        </select>
+
+
+
+        <select name="priority">
+            <option value="">All Priorities</option>
+
+            {% for value,label in priority_choices %}
+            <option value="{{ value }}"
+                    {% if priority == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+            {% endfor %}
+        </select>
+
+
+    <input
+    type="text"
+    name="search"
+    value="{{ search }}"
+    placeholder="Search by ticket title">
+
+
+        <button type="submit">Filter</button>
+
+        {% if open_only %}
+            <input type="hidden" name="open" value="1">
+            {% endif %}
+
+     </form>
+
+    {% if search or status or priority or open_only %}
+        <a href="{% url 'ticket_list' %}" class="clear-btn">Clear</a>
+    {% endif %}
+
+
+<div class="table-wrapper">
+<table class="ticket-table">
     <thead>
     <tr>
       <th>Title</th>
@@ -46,4 +93,5 @@
 
     </tbody>
 </table>
+    </div>
 {% endblock %}

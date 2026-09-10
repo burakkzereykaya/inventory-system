@@ -1,3 +1,5 @@
+from re import search
+
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import  login_required
 from .models import Ticket, TicketAssignmentHistory,TicketStatusHistory,Device
@@ -8,9 +10,32 @@ from django.utils import timezone
 @login_required
 def ticket_list(request):
     tickets = Ticket.objects.all()
+    status=request.GET.get("status","")
+    priority=request.GET.get("priority","")
+    search=request.GET.get("search","")
+    open_only=request.GET.get("open","")
+
+
+
+    if status:
+        tickets=tickets.filter(status=status)
+    if priority:
+        tickets=tickets.filter(priority=priority)
+    if search:
+        tickets=tickets.filter(title__icontains=search)
+    if open_only:
+        tickets=tickets.exclude(
+            status=Ticket.TicketStatuses.Resolved
+        )
 
     context={
-        "tickets":tickets
+        "tickets":tickets,
+        "status":status,
+        "status_choices":Ticket.TicketStatuses.choices,
+        "priority":priority,
+        "priority_choices":Ticket.Priorities.choices,
+        "search":search,
+        "open_only":open_only
     }
 
 
